@@ -128,4 +128,7 @@ pub enum LoadMetadata {
     #[error("Malformed Regex: {0}")]
     Regex(#[from] regex::Error),
 
+	/// Attribute error
+	#[error("Unexpected character: {0}")]
+	Attribute(#[from] quick_xml::events::attributes::AttrError),
 }
