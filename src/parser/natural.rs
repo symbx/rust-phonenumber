@@ -16,10 +16,17 @@ use nom::{IResult};
 
 use crate::consts;
 use crate::parser::helper::*;
+use nom::error::{ErrorKind, Error};
 
 pub fn phone_number(i: &str) -> IResult<&str, Number> {
 	let (_, i)    = extract(i)?;
 	let extension = consts::EXTN_PATTERN.captures(&i);
+
+	 if let Some(c) = extension.as_ref() {
+	 	if c.get(0).is_none() || c.get(2).is_none() {
+	 		return Err(nom::Err::Failure(Error::new("invalid phone number", ErrorKind::Eof)));
+	 	}
+    }
 
 	Ok(("", Number {
 		national: extension.as_ref()
